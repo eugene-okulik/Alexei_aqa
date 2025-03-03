@@ -20,7 +20,7 @@ def get_date_data(index, date):
     if index == 0:
         return f"Первая строка: {date + timedelta(days=7)}"
     elif index == 1:
-        return f"Вторая строка: {date.strftime("%A")}"
+        return f"Вторая строка: {date.strftime('%A')}"
     elif index == 2:
         return f"Третья строка: {now - date}"
 
