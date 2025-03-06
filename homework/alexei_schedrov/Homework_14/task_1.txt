@@ -1,0 +1,103 @@
+INSERT INTO students (first_name, last_name, age, grade)
+VALUES ('Bill', 'Gates', 65, '20')
+
+INSERT INTO rent_books (title, student_id) VALUES
+('Windows 98 for geeks', 54),
+('Windows XP for dummies', 54)
+('Windows 2000 for geeks', 54) ;
+
+CREATE TABLE `groups` (
+    id int,
+    group_name varchar(50),
+    student_id int,
+    PRIMARY KEY (id),
+    FOREIGN KEY (student_id) REFERENCES students (id)
+);
+
+-- Тут добавил автообновление id
+ALTER TABLE SchoolDB.`groups` MODIFY COLUMN id int auto_increment NOT NULL;
+
+INSERT INTO `groups` (group_name, student_id)
+values ('Rich students', 54) ;
+
+CREATE TABLE subjects (
+    subject_id int NOT NULL AUTO_INCREMENT,
+    subject_name varchar(55) NOT NULL,
+    PRIMARY KEY (subject_id)
+);
+
+INSERT INTO subjects (subject_name) VALUES
+('Math'),
+('Physics'),
+('Biology'),
+('Chemistry');
+
+CREATE TABLE lessons (
+    lesson_id int NOT NULL AUTO_INCREMENT,
+    subject_id int NOT NULL,
+    PRIMARY KEY (lesson_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects (subject_id)
+);
+
+INSERT INTO lessons (subject_id) VALUES
+(1),
+(1),
+(2),
+(2),
+(3),
+(3),
+(4),
+(4);
+
+CREATE TABLE marks (
+    mark_id int NOT NULL AUTO_INCREMENT,
+    mark_value int CHECK (mark_value >= 1 AND mark_value <= 10),
+    lesson_id int NOT NULL,
+    student_id int NOT NULL,
+    PRIMARY KEY (mark_id),
+    FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id),
+    FOREIGN KEY (student_id) REFERENCES students (id)
+);
+
+INSERT INTO marks (mark_value, lesson_id, student_id)
+VALUES
+(5, 1, 54),
+(6, 2, 54),
+(10, 3, 54),
+(8, 4, 54),
+(8, 5, 54),
+(7, 6, 54),
+(10, 7, 54),
+(8, 8, 54);
+
+SELECT mark_value from marks
+where student_id = 54 ;
+
+SELECT title from rent_books
+where student_id = 54 ;
+
+SELECT
+    s.first_name AS student_name,
+    s.last_name AS student_last_name,
+    g.group_name,
+    (SELECT GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ')
+     FROM rent_books b
+     WHERE b.student_id = s.id) AS books,
+    m.mark_value,
+    l.lesson_id,
+    sub.subject_name
+FROM
+    students s
+JOIN
+    `groups` g ON s.id = g.student_id
+LEFT JOIN
+    marks m ON s.id = m.student_id
+LEFT JOIN
+    lessons l ON m.lesson_id = l.lesson_id
+LEFT JOIN
+    subjects sub ON l.subject_id = sub.subject_id
+WHERE
+    s.id = 54;
+
+
+
