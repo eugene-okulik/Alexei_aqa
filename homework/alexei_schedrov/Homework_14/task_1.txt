@@ -1,0 +1,82 @@
+INSERT INTO students (name, second_name)
+VALUES ('Bill', 'Gates')
+
+
+INSERT INTO books (title, taken_by_student_id) VALUES
+('Windows 98 for geeks', 4856),
+('Windows XP for dummies', 4856),
+('Windows 2000 for geeks', 4856) ;
+
+
+INSERT INTO `groups`
+(title, start_date, end_date)
+VALUES('Famous people', 'mar 2025', 'mar 2033');
+
+
+UPDATE students
+SET group_id=3137
+WHERE id=4856;
+
+
+INSERT INTO subjets (title) VALUES
+('Math'),
+('Physics'),
+('Biology'),
+('Chemistry');
+
+
+INSERT INTO lessons (title, subject_id) VALUES
+('Math_lesson', 5082),
+('Math_lesson', 5082),
+('Physics_lesson', 5083),
+('Physics_lesson', 5083),
+('Biology_lesson', 5084),
+('Biology_lesson', 5084),
+('Chemistry_lesson' , 5085),
+('Chemistry_lesson' , 5085) ;
+
+
+INSERT INTO marks (value, lesson_id, student_id)
+VALUES
+(5, 9183, 4856),
+(6, 9184, 4856),
+(10, 9185, 4856),
+(8, 9186, 4856),
+(8, 9187, 4856),
+(7, 9188, 4856),
+(10, 9189, 4856),
+(8, 9190, 4856);
+
+
+SELECT value from marks
+where student_id = 4856 ;
+
+
+SELECT title from books
+where taken_by_student_id = 4856 ;
+
+SELECT
+    s.name AS student_name,
+    s.second_name AS student_second_name,
+    g.title,
+    (SELECT GROUP_CONCAT(DISTINCT b.title SEPARATOR ', ')
+     FROM books b
+     WHERE b.taken_by_student_id = s.id) AS books,
+    m.value,
+    l.id,
+    sub.title
+FROM
+    students s
+JOIN
+    `groups` g ON s.group_id = g.id
+LEFT JOIN
+    marks m ON s.id = m.student_id
+LEFT JOIN
+    lessons l ON m.lesson_id = l.id
+LEFT JOIN
+    subjets sub ON l.subject_id = sub.id
+WHERE
+    s.id = 4856;
+
+
+
