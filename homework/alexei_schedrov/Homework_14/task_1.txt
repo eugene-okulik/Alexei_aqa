@@ -1,5 +1,5 @@
-INSERT INTO students (name, second_name, group_id)
-VALUES ('Bill', 'Gates',1)
+INSERT INTO students (name, second_name)
+VALUES ('Bill', 'Gates')
 
 
 INSERT INTO books (title, taken_by_student_id) VALUES
