@@ -30,7 +30,7 @@ cursor.execute(query, values)
 db.commit()
 print(group_id := cursor.lastrowid)
 
-query = f'UPDATE students SET group_id = %s WHERE id= %s'
+query = 'UPDATE students SET group_id = %s WHERE id= %s'
 cursor.execute(query, (group_id, student_id))
 db.commit()
 
